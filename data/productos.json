@@ -1,0 +1,366 @@
+[
+  {
+    "id": "1",
+    "nombre": "Notebook Pro 14\"",
+    "imagen": "💻",
+    "precio": 1,
+    "categoria": "laptops"
+  },
+  {
+    "id": "2",
+    "nombre": "Teléfono Móvil X",
+    "imagen": "📱",
+    "precio": 2,
+    "categoria": "smartphones"
+  },
+  {
+    "id": "3",
+    "nombre": "Monitor UltraWide",
+    "imagen": "🖥️",
+    "precio": 45999.00,
+    "categoria": "monitores"
+  },
+  {
+    "id": "4",
+    "nombre": "Teclado Mecánico RGB",
+    "imagen": "⌨️",
+    "precio": 6999.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "5",
+    "nombre": "Mouse Inalámbrico",
+    "imagen": "🖱️",
+    "precio": 2999.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "6",
+    "nombre": "Impresora Multifunción",
+    "imagen": "🖨️",
+    "precio": 13999.00,
+    "categoria": "oficina"
+  },
+  {
+    "id": "7",
+    "nombre": "Cámara Fotográfica",
+    "imagen": "📷",
+    "precio": 54999.00,
+    "categoria": "fotografía"
+  },
+  {
+    "id": "8",
+    "nombre": "Cámara de Video",
+    "imagen": "🎥",
+    "precio": 39999.00,
+    "categoria": "fotografía"
+  },
+  {
+    "id": "9",
+    "nombre": "Auriculares Gaming",
+    "imagen": "🎧",
+    "precio": 8999.00,
+    "categoria": "audio"
+  },
+  {
+    "id": "10",
+    "nombre": "Micrófono USB",
+    "imagen": "🎙️",
+    "precio": 5999.00,
+    "categoria": "audio"
+  },
+  {
+    "id": "11",
+    "nombre": "Altavoz Bluetooth",
+    "imagen": "🔊",
+    "precio": 4999.00,
+    "categoria": "audio"
+  },
+  {
+    "id": "12",
+    "nombre": "Console Pro (Joystick)",
+    "imagen": "🕹️",
+    "precio": 29999.00,
+    "categoria": "gaming"
+  },
+  {
+    "id": "13",
+    "nombre": "Smartwatch Serie 7",
+    "imagen": "⌚",
+    "precio": 19999.00,
+    "categoria": "wearables"
+  },
+  {
+    "id": "14",
+    "nombre": "Robot Aspirador",
+    "imagen": "🤖",
+    "precio": 15999.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "15",
+    "nombre": "Disco Duro Externo 2TB",
+    "imagen": "💾",
+    "precio": 6999.00,
+    "categoria": "almacenamiento"
+  },
+  {
+    "id": "16",
+    "nombre": "Óptico Blu-ray",
+    "imagen": "💿",
+    "precio": 2499.00,
+    "categoria": "almacenamiento"
+  },
+  {
+    "id": "17",
+    "nombre": "Batería Portátil 20000mAh",
+    "imagen": "🔋",
+    "precio": 3399.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "18",
+    "nombre": "Enchufe Inteligente",
+    "imagen": "🔌",
+    "precio": 1999.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "19",
+    "nombre": "Starlink mini",
+    "imagen": "📡",
+    "precio": 25999.00,
+    "categoria": "redes"
+  },
+  {
+    "id": "20",
+    "nombre": "Satélite Mini",
+    "imagen": "🛰️",
+    "precio": 129999.00,
+    "categoria": "componentes"
+  },
+  {
+    "id": "21",
+    "nombre": "Calculadora Científica",
+    "imagen": "🔢",
+    "precio": 1199.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "22",
+    "nombre": "Cámara Instantánea",
+    "imagen": "📸",
+    "precio": 7499.00,
+    "categoria": "fotografía"
+  },
+  {
+    "id": "23",
+    "nombre": "Dron con Cámara wi-fi",
+    "imagen": "🚁",
+    "precio": 52999.00,
+    "categoria": "fotografía"
+  },
+  {
+    "id": "24",
+    "nombre": "Gafas de Realidad Virtual",
+    "imagen": "🕶️",
+    "precio": 44999.00,
+    "categoria": "gaming"
+  },
+  {
+    "id": "25",
+    "nombre": "Placa de Video",
+    "imagen": "📹",
+    "precio": 89999.00,
+    "categoria": "componentes"
+  },
+  {
+    "id": "26",
+    "nombre": "SmartTV vintage",
+    "imagen": "📺",
+    "precio": 59999.00,
+    "categoria": "televisión"
+  },
+  {
+    "id": "27",
+    "nombre": "TV Wide",
+    "imagen": "🖥️",
+    "precio": 29999.00,
+    "categoria": "televisión"
+  },
+  {
+    "id": "28",
+    "nombre": "Cargador fast-recover",
+    "imagen": "🪫",
+    "precio": 9985.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "29",
+    "nombre": "Macbook Air 13\"",
+    "imagen": "💻",
+    "precio": 159999.00,
+    "categoria": "laptops"
+  },
+  {
+    "id": "30",
+    "nombre": "Family Game (vintage)",
+    "imagen": "👾",
+    "precio": 19550.00,
+    "categoria": "gaming"
+  },
+  {
+    "id": "31",
+    "nombre": "Termómetro digital wifi",
+    "imagen": "🌡️",
+    "precio": 4550.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "32",
+    "nombre": "Webcam hogar",
+    "imagen": "📹",
+    "precio": 10799.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "33",
+    "nombre": "Selfie Stick",
+    "imagen": "🤳🏼",
+    "precio": 799.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "34",
+    "nombre": "Alarma hogar inalámbrica",
+    "imagen": "🏠",
+    "precio": 799.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "35",
+    "nombre": "Temporizador Bluetooth",
+    "imagen": "⏲️",
+    "precio": 399.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "36",
+    "nombre": "Timbre inalámbrico",
+    "imagen": "🛎️",
+    "precio": 1299.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "37",
+    "nombre": "Teléfono Web - IP",
+    "imagen": "☎️",
+    "precio": 9599.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "38",
+    "nombre": "Trackball USB",
+    "imagen": "🖲️",
+    "precio": 3389.00,
+    "categoria": "accesorios"
+  },
+  {
+    "id": "39",
+    "nombre": "Lámpara Philips Hue",
+    "imagen": "💡",
+    "precio": 3389.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "40",
+    "nombre": "Campera térmica USB",
+    "imagen": "🦺",
+    "precio": 41199.00,
+    "categoria": "wearables"
+  },
+  {
+    "id": "41",
+    "nombre": "Zapatillas runner con GPS",
+    "imagen": "👟",
+    "precio": 89499.00,
+    "categoria": "wearables"
+  },
+  {
+    "id": "42",
+    "nombre": "Casco c/auricular BT",
+    "imagen": "🪖",
+    "precio": 59599.00,
+    "categoria": "wearables"
+  },
+  {
+    "id": "43",
+    "nombre": "Silla ergonómica",
+    "imagen": "💺",
+    "precio": 33479.00,
+    "categoria": "oficina"
+  },
+  {
+    "id": "44",
+    "nombre": "Crypto wallet",
+    "imagen": "📟",
+    "precio": 46999.00,
+    "categoria": "almacenamiento"
+  },
+  {
+    "id": "45",
+    "nombre": "Monopatín eléctrico",
+    "imagen": "🛴",
+    "precio": 105993.00,
+    "categoria": "automotor"
+  },
+  {
+    "id": "46",
+    "nombre": "Baliza auxiliar USB",
+    "imagen": "🚧",
+    "precio": 19689.00,
+    "categoria": "automotor"
+  },
+  {
+    "id": "47",
+    "nombre": "Linterna recargable USB",
+    "imagen": "🔦",
+    "precio": 19689.00,
+    "categoria": "smart-home"
+  },
+  {
+    "id": "48",
+    "nombre": "Scooter eléctrico",
+    "imagen": "🛵",
+    "precio": 149995.00,
+    "categoria": "automotor"
+  },
+  {
+    "id": "49",
+    "nombre": "Radio vintage",
+    "imagen": "📻",
+    "precio": 19999.00,
+    "categoria": "audio"
+  },
+  {
+    "id": "50",
+    "nombre": "Router wifi 6",
+    "imagen": "🛜",
+    "precio": 19999.00,
+    "categoria": "redes"
+  },
+  {
+    "id": "51",
+    "nombre": "Disco para DJ",
+    "imagen": "📀",
+    "precio": 3559.00,
+    "categoria": "audio"
+  },
+  {
+    "id": "52",
+    "nombre": "Silla gamer",
+    "imagen": "🪑",
+    "precio": 23999.00,
+    "categoria": "gaming"
+  }
+]

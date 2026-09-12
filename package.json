@@ -1,0 +1,23 @@
+{
+  "name": "backend-express-ts",
+  "version": "1.0.0",
+  "description": "Backend con Express y TypeScript — Integraciones Web UNER",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node dist/server.js",
+    "start": "node dist/server.js"
+  },
+  "keywords": [],
+  "author": "Alejandro Oviedo",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.4.0",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
