@@ -1,134 +1,58 @@
-import express, {Request, Response} from "express"
-import { arrayProductos, arrayCategorias } from "./data.js"
-import type { Producto, Categoria } from "./data.js"
+import express from "express"
+import { GeneralController } from "./controllers/general.controller.js"
+import { ProductosController } from "./controllers/productos.controller.js"
+import { CategoriasController } from "./controllers/categorias.controller.js"
+import { CustomersController } from "./controllers/customers.controller.js"
+import { AuthMiddleware } from "./middlewares/auth.middleware.js"
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
+//middleware de autenticacion: valida el token Bearer antes de llegar al controller
+const auth = AuthMiddleware.verifyToken()
+
 //middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(express.json())
 
-//endpoint raiz de testeo
-app.get("/", (req, res) => {
-  res.json({ status: "success", mensaje: "API funcionando correctamente" })
-})
+//rutas para productos (protegidas)
+app.use("/productos", auth)
+app.get("/productos", ProductosController.getAllProductos())
+app.get("/productos/:id", ProductosController.getProductoById())
+app.post("/productos", ProductosController.createProducto())
+app.delete("/productos/:id", ProductosController.deleteProducto())
+app.put("/productos/:id", ProductosController.updateProducto())
 
-//endpoint para obtener todos los productos
-app.get("/productos", (req: Request, res: Response) => {
-    try {
-        return res.status(200)
-            .json(arrayProductos)
-    } catch (error) {
-        return res.status(500)
-            .json({ success: false,
-                message: "Ocurrio un error al obtener los productos" })
-    }
-})
+//rutas para categorias (protegidas)
+app.use("/categorias", auth)
+app.get("/categorias", CategoriasController.getAllCategories())
+app.get("/categorias/:id", CategoriasController.getCategoryById())
+app.post("/categorias", CategoriasController.createCategory())
+app.delete("/categorias/:id", CategoriasController.deleteCategory())
+app.put("/categorias/:id", CategoriasController.updateCategory())
 
-//endpoint para obtener un producto por su id
-app.get("/productos/:id", (req: Request, res: Response) => {
-    const productoId = req.params.id
-    try {
-        const productoEncontrado: Producto | undefined = arrayProductos.find(prod => prod.id === productoId)
-        if (productoEncontrado) {
-            return res.status(200)
-                .json(productoEncontrado)
-        } else {
-            return res.status(404)
-                .json({ success: false,
-                    message: "Producto no encontrado" })
-        }
-    } catch (error) {
-        return res.status(500)
-            .json({ success: false,
-                message: "Error interno del servidor" })
-    }
-})
+//rutas para customers (protegidas; el alta POST /customers es publica)
+app.get("/customers", auth, CustomersController.getAllCustomers())
+app.get("/customers/:id", auth, CustomersController.getCustomerById())
+app.delete("/customers/:id", auth, CustomersController.deleteCustomer())
+app.put("/customers/:id", auth, CustomersController.updateCustomer())
 
-//endpoint para cargar un nuevo producto
-app.post("/productos", (req: Request, res: Response) => {
-    try {
-        const { nombre, imagen, precio, categoria } = req.body as Partial<Producto>
-        if(!nombre || !imagen || !precio || !categoria) {
-            return res.status(400)
-                .json({ success: false,
-                    message: "Faltan datos obligatorios para crear el producto" })
-        }
-        const nuevoProducto: Producto = {
-            id: String(arrayProductos.length + 1),
-            nombre: nombre,
-            imagen: imagen,
-            precio: precio,
-            categoria: categoria
-        }
-        arrayProductos.push(nuevoProducto)
-        return res.status(201)
-            .json({ success: true,
-                message: "Producto creado correctamente",
-                producto: nuevoProducto })
-    } catch (error) {
-        return res.status(500)
-            .json({ success: false,
-                message: "Error interno del servidor" })
-    }
-     
-})
+//ruta de login
+app.post("/login", CustomersController.login())
 
-//endpoint para actualizar un producto por su id
-app.put("/productos/:id", (req: Request, res: Response) => {
-    try {
-        const productoId = req.params.id
-        const { nombre, imagen, precio, categoria } = req.body as Partial<Producto>
-        if (!productoId || !nombre || !imagen || !precio || !categoria) {
-            return res.status(400)
-                .json({ success: false,
-                    message: "Faltan datos obligatorios para actualizar el producto" })
-        }
-        const indice = arrayProductos.findIndex(prod => prod.id === productoId)
-        const producto = arrayProductos[indice]
-        if (!producto) {
-            return res.status(404)
-                .json({ success: false,
-                    message: "Producto no encontrado" })
-        }
-        producto.nombre = nombre
-        producto.imagen = imagen
-        producto.precio = precio
-        producto.categoria = categoria
-        return res.status(200)
-            .json({ success: true,
-                message: "Producto actualizado correctamente",
-                producto: producto })
-    } catch (error) {
-        return res.status(500)
-            .json({ success: false,
-                message: "Error interno del servidor" })
-    }
-})
+//ruta para validar el token del login
+app.post("/validate-token", CustomersController.validateToken())
 
-//endpoint para eliminar un producto por su id
-app.delete("/productos/:id", (req: Request, res: Response) => {
-    try {
-        const productoId = req.params.id
-        const indice = arrayProductos.findIndex(prod => prod.id === productoId)
-        if (indice === -1) {
-            return res.status(404)
-                .json({ success: false,
-                    message: "Producto no encontrado" })
-        }
-        arrayProductos.splice(indice, 1)
-        return res.status(204).send()
-    } catch (error) {
-        return res.status(500)
-            .json({ success: false,
-                message: "Error interno del servidor" })
-    }
-})
+//ruta para crear un nuevo customer
+app.post("/customers", CustomersController.createCustomer())
 
-//endpoint para identificar cuando un endpoint no existe
-app.use((req: Request, res: Response) => {
-    res.status(404).json({ status: "error", mensaje: "Ruta no encontrada" })
-})
+//ruta raiz de testeo
+app.get("/", GeneralController.root())
+
+//ruta para identificar cuando un endpoint no existe
+app.use(GeneralController.notFound())
+
+//middleware para manejar errores (debe ir al final)
+app.use(GeneralController.errorHandler())
 
 //iniciar servidor
 app.listen(PORT, () => {

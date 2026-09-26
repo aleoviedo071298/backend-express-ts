@@ -1,62 +1,62 @@
 [
     {
-        "categoriaId": 1,
+        "id": 1,
         "categoria": "laptops"
     },
     {
-        "categoriaId": 2,
+        "id": 2,
         "categoria": "smartphones"
     },
     {
-        "categoriaId": 3,
+        "id": 3,
         "categoria": "monitores"
     },
     {
-        "categoriaId": 4,
+        "id": 4,
         "categoria": "accesorios"
     },
     {
-        "categoriaId": 5,
+        "id": 5,
         "categoria": "oficina"
     },
     {
-        "categoriaId": 6,
+        "id": 6,
         "categoria": "fotografía"
     },
     {
-        "categoriaId": 7,
+        "id": 7,
         "categoria": "audio"
     },
     {
-        "categoriaId": 8,
+        "id": 8,
         "categoria": "gaming"
     },
     {
-        "categoriaId": 9,
+        "id": 9,
         "categoria": "wearables"
     },
     {
-        "categoriaId": 10,
+        "id": 10,
         "categoria": "smart-home"
     },
     {
-        "categoriaId": 11,
+        "id": 11,
         "categoria": "almacenamiento"
     },
     {
-        "categoriaId": 12,
+        "id": 12,
         "categoria": "redes"
     },
     {
-        "categoriaId": 13,
+        "id": 13,
         "categoria": "componentes"
     },
     {
-        "categoriaId": 14,
+        "id": 14,
         "categoria": "televisión"
     },
     {
-        "categoriaId": 15,
+        "id": 15,
         "categoria": "automotor"
     }
 ]
