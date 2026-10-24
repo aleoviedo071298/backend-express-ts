@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "1295d78a-69bf-4339-add0-cec2d2c1559c",
+    "nombre": "Alejandro Oviedo",
+    "email": "test_1790435209134@mail.com",
+    "password": "$2b$10$KlCA9MVdHgEL5i.VGmwlR.fST1QJh7KsaiZfNO1sg9//wGEq10/Cm",
+    "token": "eyJjdXN0b21lcklkIjoiMTI5NWQ3OGEtNjliZi00MzM5LWFkZDAtY2VjMmQyYzE1NTljIiwiY3VzdG9tZXJOYW1lIjoiQWxlamFuZHJvIE92aWVkbyIsImN1c3RvbWVyRW1haWwiOiJ0ZXN0XzE3OTA0MzUyMDkxMzRAbWFpbC5jb20ifQ.57cf129ea43213b3dc9c1ce179aea979f11486cf1a56fdd9bddb54a6ccb9b6b897460dd303a7bc654ea58a6bfe7f40e85c2a5db5d33caba385bda9ff5218c9c6"
+  },
+  {
+    "id": "9a138adc-3b3a-46dd-a972-518eefc9c6e0",
+    "nombre": "Juan Actualizado",
+    "email": "test_1790437846787@mail.com",
+    "password": "$2b$10$9.eR/0w8hxcTI17ZGpTtiulLsiZrp8IAbl54osT0FUG9i5Tn1FIo6",
+    "token": "eyJjdXN0b21lcklkIjoiOWExMzhhZGMtM2IzYS00NmRkLWE5NzItNTE4ZWVmYzljNmUwIiwiY3VzdG9tZXJOYW1lIjoiSnVhbiBQZXJleiIsImN1c3RvbWVyRW1haWwiOiJ0ZXN0XzE3OTA0Mzc4NDY3ODdAbWFpbC5jb20ifQ.6bfdc0457d78215ac94237b56471de64134111894f09913d91888f79af04cf31a7af3f83ffa4631b5cf90067f34793eee7f157c688c18e6f15dc83f2fd078ca8"
+  }
+]

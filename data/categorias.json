@@ -1,62 +1,86 @@
 [
-    {
-        "id": 1,
-        "categoria": "laptops"
-    },
-    {
-        "id": 2,
-        "categoria": "smartphones"
-    },
-    {
-        "id": 3,
-        "categoria": "monitores"
-    },
-    {
-        "id": 4,
-        "categoria": "accesorios"
-    },
-    {
-        "id": 5,
-        "categoria": "oficina"
-    },
-    {
-        "id": 6,
-        "categoria": "fotografía"
-    },
-    {
-        "id": 7,
-        "categoria": "audio"
-    },
-    {
-        "id": 8,
-        "categoria": "gaming"
-    },
-    {
-        "id": 9,
-        "categoria": "wearables"
-    },
-    {
-        "id": 10,
-        "categoria": "smart-home"
-    },
-    {
-        "id": 11,
-        "categoria": "almacenamiento"
-    },
-    {
-        "id": 12,
-        "categoria": "redes"
-    },
-    {
-        "id": 13,
-        "categoria": "componentes"
-    },
-    {
-        "id": 14,
-        "categoria": "televisión"
-    },
-    {
-        "id": 15,
-        "categoria": "automotor"
-    }
+  {
+    "id": 1,
+    "categoria": "laptops"
+  },
+  {
+    "id": 2,
+    "categoria": "smartphones"
+  },
+  {
+    "id": 3,
+    "categoria": "monitores"
+  },
+  {
+    "id": 4,
+    "categoria": "accesorios"
+  },
+  {
+    "id": 5,
+    "categoria": "oficina"
+  },
+  {
+    "id": 6,
+    "categoria": "fotografía"
+  },
+  {
+    "id": 7,
+    "categoria": "audio"
+  },
+  {
+    "id": 8,
+    "categoria": "gaming"
+  },
+  {
+    "id": 9,
+    "categoria": "wearables"
+  },
+  {
+    "id": 10,
+    "categoria": "smart-home"
+  },
+  {
+    "id": 11,
+    "categoria": "almacenamiento"
+  },
+  {
+    "id": 12,
+    "categoria": "redes"
+  },
+  {
+    "id": 13,
+    "categoria": "componentes"
+  },
+  {
+    "id": 14,
+    "categoria": "televisión"
+  },
+  {
+    "id": 15,
+    "categoria": "automotor"
+  },
+  {
+    "id": 16,
+    "categoria": "Categoria de prueba"
+  },
+  {
+    "id": 17,
+    "categoria": "Categoria de prueba"
+  },
+  {
+    "id": 18,
+    "categoria": "Categoria de prueba"
+  },
+  {
+    "id": 19,
+    "categoria": "Categoria de prueba"
+  },
+  {
+    "id": 20,
+    "categoria": "Categoria de prueba"
+  },
+  {
+    "id": 21,
+    "categoria": "Categoria actualizada"
+  }
 ]
