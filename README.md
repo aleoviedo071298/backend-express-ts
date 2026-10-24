@@ -6,6 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
 ## About
 
@@ -21,6 +22,7 @@ Academic backend project from the **Integraciones Web** course at UNER. Implemen
 | **Data** | JSON files (`data/productos.json`, `data/categorias.json`, `data/customers.json`) |
 | **Passwords** | `bcryptjs` (hash + compare) |
 | **Tokens** | HMAC-SHA512 signed tokens (`crypto`) |
+| **API docs** | OpenAPI 3.0.3 spec served with Swagger UI (`swagger-ui-express`) |
 
 ## Setup
 
@@ -53,6 +55,23 @@ npm start
 | `npm run build` | Compile TypeScript to `dist/` |
 | `npm start` | Run the compiled server (loads `.env`) |
 | `npm run dev` | Same as `start` (loads `.env`) |
+
+## API Documentation
+
+With the server running:
+
+| URL | Description |
+|---|---|
+| [`/api-docs`](http://localhost:3000/api-docs) | Interactive Swagger UI |
+| [`/api-docs.json`](http://localhost:3000/api-docs.json) | Raw OpenAPI 3.0.3 spec (importable into Postman, Insomnia or client generators) |
+
+The spec is hand-written and typed in `src/docs/openapi.ts`, so it compiles into `dist/` with the rest of the code and needs no runtime file scanning.
+
+To call protected endpoints from Swagger UI:
+
+1. Expand `POST /login`, **Try it out**, send `{ email, password }` and copy the `token` from the response.
+2. Click **Authorize** at the top of the page, paste the token (without the `Bearer ` prefix) and confirm.
+3. Every 🔒 endpoint now sends `Authorization: Bearer <token>` automatically. `persistAuthorization` is enabled, so the token survives a page reload.
 
 ## Authentication
 
@@ -144,8 +163,10 @@ backend-express-ts/
 │   │   ├── clase.categoriaManager.ts
 │   │   ├── clase.customerManager.ts   register, login, token generation/validation
 │   │   └── clase.AuthUtils.ts         UUID + bcrypt hash/compare
-│   └── middlewares/
-│       └── auth.middleware.ts         verifyToken
+│   ├── middlewares/
+│   │   └── auth.middleware.ts         verifyToken
+│   └── docs/
+│       └── openapi.ts                 OpenAPI 3.0.3 spec served at /api-docs
 ├── data/
 │   ├── productos.json
 │   ├── categorias.json
@@ -164,6 +185,7 @@ backend-express-ts/
 - **Authentication**: `/login` issues an HMAC-SHA512 signed token; `/validate-token` checks it; `AuthMiddleware.verifyToken()` protects `/productos`, `/categorias` and customer read/update/delete routes.
 - **Error handling**: global `notFound` and `errorHandler` middlewares (404 for unknown routes, 400 for malformed JSON, 500 otherwise).
 - **Postman collection** added in `postman/`.
+- **Swagger / OpenAPI**: typed OpenAPI 3.0.3 spec in `src/docs/openapi.ts` (18 operations, 14 schemas, `bearerAuth` security scheme), served as interactive docs at `/api-docs` and as raw JSON at `/api-docs.json`.
 - **Cleanup**: removed unused imports from `server.ts`.
 - **Git hygiene**: `node_modules/` and `dist/` are now ignored and untracked (`dist/` is regenerated with `npm run build`), along with `.env` files.
 

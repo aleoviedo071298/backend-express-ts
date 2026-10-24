@@ -1,4 +1,6 @@
 import express from "express"
+import swaggerUi from "swagger-ui-express"
+import { openapiSpec } from "./docs/openapi.js"
 import { GeneralController } from "./controllers/general.controller.js"
 import { ProductosController } from "./controllers/productos.controller.js"
 import { CategoriasController } from "./controllers/categorias.controller.js"
@@ -13,6 +15,21 @@ const auth = AuthMiddleware.verifyToken()
 
 //middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(express.json())
+
+//spec OpenAPI crudo, util para importar la API en Postman o generar clientes
+app.get("/api-docs.json", (req, res) => {
+  res.json(openapiSpec)
+})
+
+//documentacion interactiva (swagger ui); va antes del notFound para que no la capture
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(openapiSpec, {
+    customSiteTitle: "backend-express-ts API docs",
+    swaggerOptions: { persistAuthorization: true }
+  })
+)
 
 //rutas para productos (protegidas)
 app.use("/productos", auth)
