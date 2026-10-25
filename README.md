@@ -7,6 +7,7 @@
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)
 
 ## About
 
@@ -22,6 +23,7 @@ Academic backend project from the **Integraciones Web** course at UNER. Implemen
 | **Data** | JSON files (`data/productos.json`, `data/categorias.json`, `data/customers.json`) |
 | **Passwords** | `bcryptjs` (hash + compare) |
 | **Tokens** | HMAC-SHA512 signed tokens (`crypto`) |
+| **Validation** | `zod` schemas on every request body, reused to generate the OpenAPI input schemas |
 | **API docs** | OpenAPI 3.0.3 spec served with Swagger UI (`swagger-ui-express`) |
 
 ## Setup
@@ -56,6 +58,49 @@ npm start
 | `npm start` | Run the compiled server (loads `.env`) |
 | `npm run dev` | Same as `start` (loads `.env`) |
 
+## Validation
+
+Every request body is parsed with a Zod schema before the controller runs. The schemas live in `src/schemas/` and `ValidateMiddleware.validate()` wires them into the routes:
+
+```ts
+app.post("/productos", validate({ body: productoInputSchema }), ProductosController.createProducto())
+```
+
+The same schemas feed the OpenAPI spec, so the input contract is defined once:
+
+```ts
+ProductoInput: desdeZod(productoInputSchema)   // src/docs/openapi.ts
+```
+
+What validation does:
+
+| Rule | Effect |
+|---|---|
+| Required fields and types | A missing or wrong-typed field returns `400` instead of reaching the manager |
+| `.trim()` on every string | `"  Teclado  "` is stored as `"Teclado"` |
+| Email normalized then validated | `"  ALE@Mail.COM "` becomes `"ale@mail.com"`; a malformed address returns `400` |
+| `password` minimum 6 characters | Only on register and update, not on login |
+| Unknown keys | Stripped from the body before it reaches the controller |
+| `/categorias/:id` | Coerced to a positive integer; a non-numeric id returns `400` instead of `404` |
+
+The validated body replaces `req.body`, so controllers receive data that is already trimmed and normalized and no longer check for missing fields themselves.
+
+A failed validation returns `400` with one entry per invalid field:
+
+```json
+{
+  "success": false,
+  "message": "Datos invalidos",
+  "errors": [
+    { "campo": "nombre", "mensaje": "nombre no puede estar vacio" },
+    { "campo": "email", "mensaje": "email debe tener un formato valido" },
+    { "campo": "password", "mensaje": "password debe tener al menos 6 caracteres" }
+  ]
+}
+```
+
+Path param failures use the same shape with `"message": "Parametros invalidos"`.
+
 ## API Documentation
 
 With the server running:
@@ -65,7 +110,7 @@ With the server running:
 | [`/api-docs`](http://localhost:3000/api-docs) | Interactive Swagger UI |
 | [`/api-docs.json`](http://localhost:3000/api-docs.json) | Raw OpenAPI 3.0.3 spec (importable into Postman, Insomnia or client generators) |
 
-The spec is hand-written and typed in `src/docs/openapi.ts`, so it compiles into `dist/` with the rest of the code and needs no runtime file scanning.
+The spec lives in `src/docs/openapi.ts`, so it compiles into `dist/` with the rest of the code and needs no runtime file scanning. Request schemas (`ProductoInput`, `CustomerInput`, …) are generated from the Zod schemas with `z.toJSONSchema()`, so Swagger always matches what the API actually accepts. Response schemas are written by hand.
 
 To call protected endpoints from Swagger UI:
 
@@ -129,10 +174,10 @@ Customer responses never include `password` or `token` (except the token returne
 | Method | Route | Description | Status |
 |---|---|---|---|
 | GET | `/categorias` | Get all categories | 200 |
-| GET | `/categorias/:id` | Get category by ID | 200 / 404 |
+| GET | `/categorias/:id` | Get category by ID | 200 / 400 / 404 |
 | POST | `/categorias` | Create a new category | 201 / 400 |
 | PUT | `/categorias/:id` | Update a category | 200 / 400 / 404 |
-| DELETE | `/categorias/:id` | Delete a category | 204 / 404 |
+| DELETE | `/categorias/:id` | Delete a category | 204 / 400 / 404 |
 
 ### Customers
 
@@ -144,7 +189,7 @@ Customer responses never include `password` or `token` (except the token returne
 | PUT | `/customers/:id` 🔒 | Update a customer | 200 / 400 / 404 / 409 |
 | DELETE | `/customers/:id` 🔒 | Delete a customer | 204 / 404 |
 
-Unknown routes return `404` and invalid JSON bodies return `400`, both handled in `GeneralController`.
+Every `400` above comes from Zod and carries an `errors` array — see [Validation](#validation). Unknown routes return `404` and malformed JSON returns `400`, both handled in `GeneralController`.
 
 ## Project Structure
 
@@ -164,7 +209,13 @@ backend-express-ts/
 │   │   ├── clase.customerManager.ts   register, login, token generation/validation
 │   │   └── clase.AuthUtils.ts         UUID + bcrypt hash/compare
 │   ├── middlewares/
-│   │   └── auth.middleware.ts         verifyToken
+│   │   ├── auth.middleware.ts         verifyToken
+│   │   └── validate.middleware.ts     validate({ body, params }) con zod
+│   ├── schemas/                       Zod schemas (fuente de verdad de los inputs)
+│   │   ├── common.schema.ts           helpers compartidos (texto, email, id numerico)
+│   │   ├── producto.schema.ts
+│   │   ├── categoria.schema.ts
+│   │   └── customer.schema.ts
 │   └── docs/
 │       └── openapi.ts                 OpenAPI 3.0.3 spec served at /api-docs
 ├── data/
@@ -185,7 +236,8 @@ backend-express-ts/
 - **Authentication**: `/login` issues an HMAC-SHA512 signed token; `/validate-token` checks it; `AuthMiddleware.verifyToken()` protects `/productos`, `/categorias` and customer read/update/delete routes.
 - **Error handling**: global `notFound` and `errorHandler` middlewares (404 for unknown routes, 400 for malformed JSON, 500 otherwise).
 - **Postman collection** added in `postman/`.
-- **Swagger / OpenAPI**: typed OpenAPI 3.0.3 spec in `src/docs/openapi.ts` (18 operations, 14 schemas, `bearerAuth` security scheme), served as interactive docs at `/api-docs` and as raw JSON at `/api-docs.json`.
+- **Swagger / OpenAPI**: typed OpenAPI 3.0.3 spec in `src/docs/openapi.ts` (18 operations, 15 schemas, `bearerAuth` security scheme), served as interactive docs at `/api-docs` and as raw JSON at `/api-docs.json`.
+- **Zod validation**: schemas in `src/schemas/` + `ValidateMiddleware.validate()` on every route with a body. Controllers no longer check for missing fields; `400` responses now carry an `errors` array with one entry per invalid field. The same schemas generate the OpenAPI input schemas via `z.toJSONSchema()`.
 - **Cleanup**: removed unused imports from `server.ts`.
 - **Git hygiene**: `node_modules/` and `dist/` are now ignored and untracked (`dist/` is regenerated with `npm run build`), along with `.env` files.
 

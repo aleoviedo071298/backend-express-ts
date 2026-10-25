@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import type { Categoria } from "../data.js"
+import type { CategoriaInput } from "../schemas/categoria.schema.js"
 import { CategoriaManager } from "../classes/clase.categoriaManager.js"
 
 export class CategoriasController {
@@ -37,12 +37,8 @@ export class CategoriasController {
     //endpoint para cargar una nueva categoria
     static createCategory = () => async (req: Request, res: Response) => {
         try {
-            const { categoria } = req.body as Partial<Categoria>
-            if(!categoria) {
-                return res.status(400)
-                    .json({ success: false,
-                        message: "Faltan datos obligatorios para crear la categoria" })
-            }
+            //el body ya viene validado y normalizado por ValidateMiddleware
+            const { categoria } = req.body as CategoriaInput
             const nuevaCategoria = CategoriaManager.crear(categoria)
             return res.status(201)
                 .json({ success: true,
@@ -58,12 +54,8 @@ export class CategoriasController {
     //endpoint para actualizar una categoria por su id
     static updateCategory = () => async (req: Request, res: Response) => {
         try {
-            const { categoria } = req.body as Partial<Categoria>
-            if (!categoria) {
-                return res.status(400)
-                    .json({ success: false,
-                        message: "Faltan datos obligatorios para actualizar la categoria" })
-            }
+            //el body ya viene validado y normalizado por ValidateMiddleware
+            const { categoria } = req.body as CategoriaInput
             const categoriaEncontrada = CategoriaManager.actualizar(Number(req.params.id), categoria)
             if (!categoriaEncontrada) {
                 return res.status(404)

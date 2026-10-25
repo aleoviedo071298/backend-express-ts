@@ -1,6 +1,17 @@
+import { z } from "zod"
 import type { JsonObject } from "swagger-ui-express"
+import { productoInputSchema, productoSchema } from "../schemas/producto.schema.js"
+import { categoriaInputSchema, categoriaSchema } from "../schemas/categoria.schema.js"
+import { customerInputSchema, customerSchema, loginInputSchema } from "../schemas/customer.schema.js"
 
 const PORT = process.env.PORT || 3000
+
+//traduce un schema de zod a json schema compatible con openapi 3.0.
+//se descarta additionalProperties: el middleware descarta las claves extra en vez de rechazarlas
+const desdeZod = (esquema: z.ZodType) => {
+  const { additionalProperties, ...jsonSchema } = z.toJSONSchema(esquema, { target: "openapi-3.0" })
+  return jsonSchema
+}
 
 //referencia corta a un schema de components.schemas
 const schema = (nombre: string) => ({ $ref: `#/components/schemas/${nombre}` })
@@ -65,27 +76,9 @@ export const openapiSpec: JsonObject = {
       }
     },
     schemas: {
-      Producto: {
-        type: "object",
-        required: ["id", "nombre", "imagen", "precio", "categoria"],
-        properties: {
-          id: { type: "string", format: "uuid", description: "Auto-generated identifier", readOnly: true },
-          nombre: { type: "string", example: "Teclado mecanico" },
-          imagen: { type: "string", example: "teclado.jpg" },
-          precio: { type: "number", example: 45900 },
-          categoria: { type: "string", example: "perifericos" }
-        }
-      },
-      ProductoInput: {
-        type: "object",
-        required: ["nombre", "imagen", "precio", "categoria"],
-        properties: {
-          nombre: { type: "string", example: "Teclado mecanico" },
-          imagen: { type: "string", example: "teclado.jpg" },
-          precio: { type: "number", example: 45900 },
-          categoria: { type: "string", example: "perifericos" }
-        }
-      },
+      //generados desde zod: los schemas de src/schemas son la unica fuente de verdad de los datos de entrada
+      Producto: desdeZod(productoSchema),
+      ProductoInput: desdeZod(productoInputSchema),
       ProductoRespuesta: {
         type: "object",
         properties: {
@@ -94,21 +87,8 @@ export const openapiSpec: JsonObject = {
           producto: schema("Producto")
         }
       },
-      Categoria: {
-        type: "object",
-        required: ["id", "categoria"],
-        properties: {
-          id: { type: "integer", example: 1, description: "Auto-generated identifier", readOnly: true },
-          categoria: { type: "string", example: "perifericos" }
-        }
-      },
-      CategoriaInput: {
-        type: "object",
-        required: ["categoria"],
-        properties: {
-          categoria: { type: "string", example: "perifericos" }
-        }
-      },
+      Categoria: desdeZod(categoriaSchema),
+      CategoriaInput: desdeZod(categoriaInputSchema),
       CategoriaRespuesta: {
         type: "object",
         properties: {
@@ -117,35 +97,8 @@ export const openapiSpec: JsonObject = {
           categoria: schema("Categoria")
         }
       },
-      Customer: {
-        type: "object",
-        description: "Public view of a customer: password and token are never returned.",
-        required: ["id", "nombre", "email"],
-        properties: {
-          id: { type: "string", format: "uuid", description: "Auto-generated identifier", readOnly: true },
-          nombre: { type: "string", example: "Alejandro Oviedo" },
-          email: { type: "string", format: "email", example: "alejandro@example.com" }
-        }
-      },
-      CustomerInput: {
-        type: "object",
-        required: ["nombre", "email", "password"],
-        properties: {
-          nombre: { type: "string", example: "Alejandro Oviedo" },
-          email: {
-            type: "string",
-            format: "email",
-            description: "Normalized to lowercase and trimmed; must be unique",
-            example: "alejandro@example.com"
-          },
-          password: {
-            type: "string",
-            format: "password",
-            description: "Stored hashed with bcryptjs; never returned by the API",
-            example: "unaPasswordSegura"
-          }
-        }
-      },
+      Customer: desdeZod(customerSchema),
+      CustomerInput: desdeZod(customerInputSchema),
       CustomerRespuesta: {
         type: "object",
         properties: {
@@ -154,14 +107,7 @@ export const openapiSpec: JsonObject = {
           customer: schema("Customer")
         }
       },
-      LoginInput: {
-        type: "object",
-        required: ["email", "password"],
-        properties: {
-          email: { type: "string", format: "email", example: "alejandro@example.com" },
-          password: { type: "string", format: "password", example: "unaPasswordSegura" }
-        }
-      },
+      LoginInput: desdeZod(loginInputSchema),
       LoginRespuesta: {
         type: "object",
         properties: {
@@ -188,6 +134,25 @@ export const openapiSpec: JsonObject = {
           message: { type: "string", example: "Error interno del servidor" }
         }
       },
+      ValidacionError: {
+        type: "object",
+        description: "Returned when Zod rejects the request body or path params.",
+        properties: {
+          success: { type: "boolean", example: false },
+          message: { type: "string", example: "Datos invalidos" },
+          errors: {
+            type: "array",
+            description: "One entry per invalid field",
+            items: {
+              type: "object",
+              properties: {
+                campo: { type: "string", example: "precio" },
+                mensaje: { type: "string", example: "precio no puede ser negativo" }
+              }
+            }
+          }
+        }
+      },
       GeneralRespuesta: {
         type: "object",
         properties: {
@@ -197,7 +162,7 @@ export const openapiSpec: JsonObject = {
       }
     },
     responses: {
-      BadRequest: okJSON("Missing or invalid required fields", "ApiError"),
+      BadRequest: okJSON("Zod validation failed; the errors array lists each invalid field", "ValidacionError"),
       Unauthorized: okJSON("Missing, malformed or invalid token", "ApiError"),
       NotFound: okJSON("Resource not found", "ApiError"),
       Conflict: okJSON("A customer with that email already exists", "ApiError"),
@@ -226,7 +191,7 @@ export const openapiSpec: JsonObject = {
         requestBody: bodyJSON("LoginInput"),
         responses: {
           200: okJSON("Login successful", "LoginRespuesta"),
-          400: okJSON("Email and password are required", "ApiError"),
+          400: respuesta("BadRequest"),
           401: okJSON("Invalid credentials", "ApiError"),
           500: respuesta("ServerError")
         }
@@ -334,13 +299,14 @@ export const openapiSpec: JsonObject = {
       }
     },
     "/categorias/{id}": {
-      parameters: [idParam("integer", "Category numeric id")],
+      parameters: [idParam("integer", "Category numeric id; a non-numeric value returns 400")],
       get: {
         tags: ["Categorias"],
         summary: "Get a category by id",
         security: [{ bearerAuth: [] }],
         responses: {
           200: okJSON("Category found", "Categoria"),
+          400: respuesta("BadRequest"),
           401: respuesta("Unauthorized"),
           404: respuesta("NotFound"),
           500: respuesta("ServerError")
@@ -365,6 +331,7 @@ export const openapiSpec: JsonObject = {
         security: [{ bearerAuth: [] }],
         responses: {
           204: respuesta("NoContent"),
+          400: respuesta("BadRequest"),
           401: respuesta("Unauthorized"),
           404: respuesta("NotFound"),
           500: respuesta("ServerError")

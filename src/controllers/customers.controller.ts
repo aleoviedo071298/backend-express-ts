@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import type { Customer } from "../data.js"
+import type { CustomerInput, LoginInput } from "../schemas/customer.schema.js"
 import { CustomerManager } from "../classes/clase.customerManager.js"
 
 export class CustomersController {
@@ -37,13 +37,8 @@ export class CustomersController {
     //endpoint para registrar un nuevo customer
     static createCustomer = () => async (req: Request, res: Response) => {
         try {
-            const { nombre, email, password } = req.body as Partial<Customer>
-            if (!nombre || !email || !password) {
-                return res.status(400)
-                    .json({ success: false,
-                        message: "Faltan datos obligatorios para crear el customer" })
-            }
-            const resultado = await CustomerManager.crear({ nombre, email, password })
+            //el body ya viene validado y normalizado por ValidateMiddleware
+            const resultado = await CustomerManager.crear(req.body as CustomerInput)
             if (!resultado.ok) {
                 return res.status(409)
                     .json({ success: false,
@@ -63,13 +58,8 @@ export class CustomersController {
     //endpoint para actualizar un customer por su id
     static updateCustomer = () => async (req: Request, res: Response) => {
         try {
-            const { nombre, email, password } = req.body as Partial<Customer>
-            if (!nombre || !email || !password) {
-                return res.status(400)
-                    .json({ success: false,
-                        message: "Faltan datos obligatorios para actualizar el customer" })
-            }
-            const resultado = await CustomerManager.actualizar(req.params.id as string,{ nombre, email, password })
+            //el body ya viene validado y normalizado por ValidateMiddleware
+            const resultado = await CustomerManager.actualizar(req.params.id as string, req.body as CustomerInput)
             if (!resultado.ok) {
                 return resultado.motivo === "no_encontrado"
                     ? res.status(404)
@@ -109,12 +99,8 @@ export class CustomersController {
     //endpoint de login: valida email y password
     static login = () => async (req: Request, res: Response) => {
         try {
-            const { email, password } = req.body as Partial<Customer>
-            if (!email || !password) {
-                return res.status(400)
-                    .json({ success: false,
-                        message: "Email y password son obligatorios" })
-            }
+            //el body ya viene validado y normalizado por ValidateMiddleware
+            const { email, password } = req.body as LoginInput
             const resultado = await CustomerManager.login(email, password)
             if (!resultado) {
                 return res.status(401)

@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import type { Producto } from "../data.js"
+import type { ProductoInput } from "../schemas/producto.schema.js"
 import { ProductoManager } from "../classes/clase.productoManager.js"
 
 export class ProductosController {
@@ -37,13 +37,8 @@ export class ProductosController {
 //endpoint para cargar un nuevo producto
     static createProducto = () => async (req: Request, res: Response) => {
         try {
-            const { nombre, imagen, precio, categoria } = req.body as Partial<Producto>
-            if(!nombre || !imagen || precio === undefined || !categoria) {
-                return res.status(400)
-                    .json({ success: false,
-                        message: "Faltan datos obligatorios para crear el producto" })
-            }
-            const nuevoProducto = ProductoManager.crear({ nombre, imagen, precio, categoria })
+            //el body ya viene validado y normalizado por ValidateMiddleware
+            const nuevoProducto = ProductoManager.crear(req.body as ProductoInput)
             return res.status(201)
                 .json({ success: true,
                     message: "Producto creado correctamente",
@@ -58,13 +53,8 @@ export class ProductosController {
 //endpoint para actualizar un producto por su id
     static updateProducto = () => async (req: Request, res: Response) => {
         try {
-            const { nombre, imagen, precio, categoria } = req.body as Partial<Producto>
-            if (!nombre || !imagen || precio === undefined || !categoria) {
-                return res.status(400)
-                    .json({ success: false,
-                        message: "Faltan datos obligatorios para actualizar el producto" })
-            }
-            const producto = ProductoManager.actualizar(String(req.params.id), { nombre, imagen, precio, categoria })
+            //el body ya viene validado y normalizado por ValidateMiddleware
+            const producto = ProductoManager.actualizar(String(req.params.id), req.body as ProductoInput)
             if (!producto) {
                 return res.status(404)
                     .json({ success: false,
