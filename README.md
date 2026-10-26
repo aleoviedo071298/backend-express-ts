@@ -11,7 +11,7 @@
 
 ## About
 
-Academic backend project from the **Integraciones Web** course at UNER. Implements a typed REST API with Express 5 and TypeScript, reading and persisting data in local JSON files. Covers typed data modeling, layered architecture (routes → controllers → managers), async error handling, password hashing, signed-token authentication and full CRUD with proper HTTP status codes.
+Academic backend project from the **Integraciones Web** course at Teclab. Implements a typed REST API with Express 5 and TypeScript, reading and persisting data in local JSON files. Covers typed data modeling, layered architecture (routes → controllers → managers), async error handling, password hashing, signed-token authentication and full CRUD with proper HTTP status codes.
 
 ## Tech Stack
 
